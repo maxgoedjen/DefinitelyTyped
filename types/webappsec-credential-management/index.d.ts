@@ -376,8 +376,19 @@ interface AuthenticationExtensionsClientInputs {
     txAuthSimple?: string | undefined;
     uvi?: boolean | undefined;
     uvm?: boolean | undefined;
+    largeBlob?: AuthenticationExtensionsLargeBlobInputs | undefined;
 }
 
+/**
+ * @see {@link https://w3c.github.io/webauthn/#sctn-large-blob-extension}
+ */
+
+interface AuthenticationExtensionsLargeBlobInputs {
+     support?:  "required" | "preferred" | undefined;
+     read?: boolean | undefined;
+     write?: BufferSource | undefined;
+ }
+ 
 /**
  * @see {@link https://w3c.github.io/webauthn/#dictdef-publickeycredentialrequestoptions}
  */
@@ -480,10 +491,28 @@ interface AuthenticatorAssertionResponse extends AuthenticatorResponse {
 }
 
 /**
+ * @see {@link https://w3c.github.io/webauthn/#dictdef-authenticationextensionsclientoutputs}
+ */
+ interface AuthenticationExtensionsClientOutputs {
+    largeBlob: AuthenticationExtensionsLargeBlobOutputs | undefined;
+ }
+ 
+ /**
+  * @see {@link https://w3c.github.io/webauthn/#dom-authenticationextensionslargebloboutputs-blob}
+  */
+
+ interface AuthenticationExtensionsLargeBlobOutputs {
+    supported: boolean | undefined;
+    blob: ArrayBuffer | undefined;
+    written: boolean | undefined;
+ }
+
+/**
  * @see {@link https://w3c.github.io/webauthn/#publickeycredential}
  */
 interface PublicKeyCredential extends Credential {
     readonly type: "public-key";
     readonly rawId: ArrayBuffer;
     readonly response: AuthenticatorResponse;
+    getClientExtensionResults(): AuthenticationExtensionsClientOutputs | null;
 }
